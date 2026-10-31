@@ -39,7 +39,7 @@ jobs:
         env:
           HEADLESS: "0"
           DISPLAY: ":99"
-          USE_PROXY: "1"
+          USE_PROXY: "0"
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           TELEGRAM_EMAIL_BOT_TOKEN: ${{ secrets.TELEGRAM_EMAIL_BOT_TOKEN }}
