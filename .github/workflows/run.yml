@@ -57,3 +57,19 @@ jobs:
           Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
           sleep 2
           python3 webshare_account_creator.py
+
+      - name: Synchronize Discovered Accounts to Origin
+        if: always()
+        run: |
+          cd engine
+          python3 sync_folder_db.py || true
+          git config user.name "AAA Fleet Harvester"
+          git config user.email "bot@aaacreater.dpdns.org"
+          git add accounts_vault.db vault_folders/ accounts.json || true
+          if git diff --staged --quiet; then
+            echo "No database changes to commit."
+          else
+            git commit -m "chore(vault): auto-commit newly harvested account credentials [skip ci]"
+            git pull --rebase origin main || true
+            git push origin main || true
+          fi
