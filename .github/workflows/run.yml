@@ -1,8 +1,9 @@
 name: AAA • Webshare Harvester
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: "0 4,16 * * *":
+    - cron: "0 4,16 * * *"
 
 jobs:
   harvest:
