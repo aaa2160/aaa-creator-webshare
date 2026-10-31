@@ -2,26 +2,26 @@ name: AAA • Webshare Harvester
 
 on:
   schedule:
-    - cron: '0 3 1 * *'
+    - cron: "0 4 * * 3"
   workflow_dispatch:
 
 jobs:
   harvest:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 10
     steps:
       - name: Fetch Private Engine Core
         uses: actions/checkout@v4
         with:
-          repository: 'aaa2160/aaa-domain-email-proxy-hub'
+          repository: "aaa2160/aaa-domain-email-proxy-hub"
           token: ${{ secrets.GH_PAT }}
-          path: 'engine'
+          path: "engine"
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
+          cache: "pip"
 
       - name: Install Dependencies
         run: |
@@ -33,6 +33,7 @@ jobs:
       - name: Execute Autonomous Provisioner
         env:
           HEADLESS: "1"
+          USE_PROXY: "1"
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           TELEGRAM_EMAIL_BOT_TOKEN: ${{ secrets.TELEGRAM_EMAIL_BOT_TOKEN }}
@@ -42,6 +43,8 @@ jobs:
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_D1_ID: ${{ secrets.CLOUDFLARE_D1_ID }}
+          WEBSHARE_API_KEY: ${{ secrets.WEBSHARE_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           cd engine
