@@ -23,7 +23,12 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
-      - name: Install Dependencies
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+
+      - name: Install Python Dependencies
         run: |
           cd engine
           python3 -m pip install --upgrade pip
@@ -33,7 +38,7 @@ jobs:
       - name: Execute Autonomous Provisioner
         env:
           HEADLESS: "1"
-          USE_PROXY: "0"
+          USE_PROXY: "1"
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           TELEGRAM_EMAIL_BOT_TOKEN: ${{ secrets.TELEGRAM_EMAIL_BOT_TOKEN }}
