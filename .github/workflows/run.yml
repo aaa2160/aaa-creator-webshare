@@ -65,7 +65,8 @@ jobs:
           python3 sync_folder_db.py || true
           git config user.name "AAA Fleet Harvester"
           git config user.email "bot@aaacreater.dpdns.org"
-          git add accounts_vault.db vault_folders/ accounts.json || true
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/aaa2160/aaa-domain-email-proxy-hub.git
+          git add accounts_vault.db vault_folders/ *.csv || true
           if git diff --staged --quiet; then
             echo "No database changes to commit."
           else
