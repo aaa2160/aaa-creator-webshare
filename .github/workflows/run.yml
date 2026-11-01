@@ -39,7 +39,7 @@ jobs:
         env:
           HEADLESS: "0"
           DISPLAY: ":99"
-          USE_PROXY: "0"
+          USE_PROXY: "1"
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           TELEGRAM_EMAIL_BOT_TOKEN: ${{ secrets.TELEGRAM_EMAIL_BOT_TOKEN }}
@@ -56,4 +56,17 @@ jobs:
           cd engine
           Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
           sleep 2
-          python3 webshare_account_creator.py
+          # Attempt 1: direct connection with a fresh proxy list baked in.
+          if python3 webshare_account_creator.py; then
+            echo "SUCCESS on direct connection"
+            exit 0
+          fi
+          echo "Attempt 1 failed; retrying through the residential proxy pool..."
+          # Attempt 2: force the creator through the proxy and refresh its cache.
+          rm -f /tmp/aaa_proxy_pool_cache.json
+          if USE_PROXY=1 FORCE_PROXY=1 python3 webshare_account_creator.py; then
+            echo "SUCCESS on proxy connection"
+            exit 0
+          fi
+          echo "Both attempts failed."
+          exit 1
